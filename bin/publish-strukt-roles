@@ -26,8 +26,8 @@ foreach(array(
 		) as $folder)
 			Strukt\Fs::mkdir(sprintf("%s/AuthModule/%s", $app_dir, $folder));
 
-copy(sprintf("%s/app/src/App/AuditModule/AuditModule.php", $pkg_dir), 
-		sprintf("%s/AuditModule/%sAuditModule.php", $app_dir, $cfg["app-name"]));
+copy(sprintf("%s/app/src/App/AuthModule/AuthModule.php", $pkg_dir), 
+		sprintf("%s/AuthModule/%sAuthModule.php", $app_dir, $cfg["app-name"]));
 
 Strukt\Fs::cpr(sprintf("%s/database", $pkg_dir), sprintf("%s/database", $app_root));
 
