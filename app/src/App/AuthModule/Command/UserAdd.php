@@ -25,7 +25,7 @@ class UserAdd extends \App\Contract\AbstractCommand{
 
         	"username"=>$username,
         	"password"=>$password,
-        	"role" => $role->getId()
+        	"role_id" => $role->getId()
         ))))
         	throw new \Exception("Failed to add [User]!");
 
