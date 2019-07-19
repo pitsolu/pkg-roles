@@ -26,8 +26,10 @@ foreach(array(
 		) as $folder)
 			Strukt\Fs::mkdir(sprintf("%s/AuthModule/%s", $app_dir, $folder));
 
-copy(sprintf("%s/app/src/App/AuthModule/AuthModule.php", $pkg_dir), 
-		sprintf("%s/AuthModule/%sAuthModule.php", $app_dir, $cfg["app-name"]));
+$auth_mod_file = sprintf("%s/AuthModule/%sAuthModule.php", $app_dir, $cfg["app-name"])
+copy(sprintf("%s/app/src/App/AuthModule/AuthModule.php", $pkg_dir), $auth_mod_file);
+$contents = str_replace("__APP__", $cfg["app-name"], Strukt\Fs::cat($auth_mod_file));
+Strukt\Fs::overwrite($auth_mod_file, $contents);
 
 Strukt\Fs::cpr(sprintf("%s/database", $pkg_dir), sprintf("%s/database", $app_root));
 
@@ -45,4 +47,4 @@ foreach(glob(sprintf("%s/app/**/**/**/**/**", $pkg_dir)) as $file){
 
 	$file = new SplFileObject($app_root.$path, "w+"); 
 	$file->fwrite($content);
-}
+} 
