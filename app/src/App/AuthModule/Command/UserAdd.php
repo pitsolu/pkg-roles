@@ -13,21 +13,21 @@ class UserAdd extends \App\Contract\AbstractCommand{
 	public function execute(Input $in, Output $out){
 
 		$username = trim($in->getInput("Username:"));
-        $password = $in->getMaskedInput("Password:");
-        $role_name = $in->getInput("Role:");
+                $password = $in->getMaskedInput("Password:");
+                $role_name = $in->getInput("Role:");
 
-        $role = $this->get("au.ctr.Role")->findByName($role_name);
+                $role = $this->get("au.ctr.Role")->findByName($role_name);
 
-        if(empty($role))
-        	throw new \Exception(sprintf("Failed to find role[%s]!", $role_name));
+                if(empty($role))
+                	throw new \Exception(sprintf("Failed to find role[%s]!", $role_name));
 
-        if(is_null($this->get("au.ctr.User")->add(array(
+                if(is_null($this->get("au.ctr.User")->add(array(
 
-        	"username"=>$username,
-        	"password"=>$password,
-        	"role_id" => $role->getId()
-        ))))
-        	throw new \Exception("Failed to add [User]!");
+                	"username"=>$username,
+                	"password"=>$password,
+                	"role_id" => $role->getId()
+                ))))
+        	       throw new \Exception("Failed to add [User]!");
 
 		$out->add("Successfully added [User].");
 	}

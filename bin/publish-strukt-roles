@@ -36,8 +36,11 @@ Strukt\Fs::cpr(sprintf("%s/database", $pkg_dir), sprintf("%s/database", $app_roo
 Strukt\Fs::rename(sprintf("%s/console", $app_root), sprintf("%s/console~", $app_root));
 copy(sprintf("%s/console", $pkg_dir), sprintf("%s/console", $app_root));
 
+$index_file = sprintf("%s/index.php", $app_root);
 Strukt\Fs::rename(sprintf("%s/index.php", $app_root), sprintf("%s/index.php~", $app_root));
-copy(sprintf("%s/index.php", $pkg_dir), sprintf("%s/index.php", $app_root));
+copy(sprintf("%s/index.php", $pkg_dir), $index_file);
+$contents = str_replace("__APP__", $cfg["app-name"], $index_file);
+Strukt\Fs::overwrite($index_file, $contents);
 
 foreach(glob(sprintf("%s/app/**/**/**/**/**", $pkg_dir)) as $file){
 
