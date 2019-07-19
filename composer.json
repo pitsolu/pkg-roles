@@ -1,0 +1,17 @@
+{
+    "name": "strukt/roles",
+    "description": "RBAC",
+    "type": "strukt-module",
+    "require": {
+        "strukt/do": "dev-master"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Pitsolu",
+            "email": "pitsolu@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "bin":["bin/publish-strukt-roles"]
+}

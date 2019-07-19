@@ -1,0 +1,45 @@
+#!/usr/bin/env php
+<?php
+
+$app_root = realpath(__DIR__."/../../../../");
+$pkg_dir = realpath(__DIR__."/../");
+
+$cfg = parse_ini_file(sprintf("%s/cfg/app.ini", $app_root));
+
+require(sprintf("%s/vendor/autoload.php", $app_root));
+
+$app_dir = sprintf("%s/app/src/%s", $app_root, $cfg["app-name"]);
+Strukt\Fs::rename(sprintf("%s/AuthModule", $app_dir), sprintf("%s/AuthModule~", $app_dir));
+Strukt\Fs::mkdir(sprintf("%s/AuthModule", $app_dir));
+
+foreach(array(
+
+			"Controller",
+			"Tests",
+			"Form",
+			"Router",
+			"Command"
+
+		) as $folder)
+			Strukt\Fs::mkdir(sprintf("%s/AuthModule/%s", $app_dir, $folder));
+
+copy(sprintf("%s/app/src/App/AuditModule/AuditModule.php", $pkg_dir), 
+		sprintf("%s/AuditModule/%sAuditModule.php", $app_dir, $cfg["app-name"]));
+
+Strukt\Fs::cpr(sprintf("%s/database", $pkg_dir), sprintf("%s/database", $app_root));
+
+Strukt\Fs::rename(sprintf("%s/console", $app_root), sprintf("%s/console~", $app_root));
+copy(sprintf("%s/console", $pkg_dir), sprintf("%s/console", $app_root));
+
+Strukt\Fs::rename(sprintf("%s/index.php", $app_root), sprintf("%s/index.php~", $app_root));
+copy(sprintf("%s/index.php", $pkg_dir), sprintf("%s/index.php", $app_root));
+
+foreach(glob(sprintf("%s/app/**/**/**/**/**", $pkg_dir)) as $file){
+
+	$path = str_replace(array($pkg_dir, "/App/"), array("", sprintf("/%s/", $cfg["app-name"])), $file);
+
+	$content = str_replace("__APP__", $cfg["app-name"], file_get_contents($file));
+
+	$file = new SplFileObject($app_root.$path, "w+"); 
+	$file->fwrite($content);
+}

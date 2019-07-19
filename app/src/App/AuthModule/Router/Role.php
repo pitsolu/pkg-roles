@@ -1,0 +1,138 @@
+<?php
+
+namespace __APP__\AuthModule\Router;
+
+class Role extends \Strukt\Contract\Router{
+
+	/**
+	* @Route(/role/all)
+	* @Method(POST)
+	*/
+	public function all(Request $request){
+
+		$filter = [];
+
+		$start_at = $request->get("start_at");
+		$page_size = $request->get("page_size");
+
+		$name = $request->get("name");
+		if(!empty($name))
+			$filter["name"] = $name;
+
+		$pager = $this->get("au.ctr.Role")->pager($filter, $start_at, $page_size);
+
+		return self::json($pager);
+	}
+
+	/**
+	* @Route(/role/update)
+	* @Method(POST)
+	*/
+	public function update(Request $request){
+
+		$id = $request->get("id");
+		$name = $request->get("name");
+		$descr = $request->get("descr");
+
+		$roleFrm = $this->get("au.frm.Role", [$request]);
+		$messages = $roleFrm->validate();
+
+		if($messages["is_valid"]){
+
+			$success = $this->get("au.ctr.Role")->update($id, array(
+
+				"name"=>$name,
+				"descr"=>$descr
+			));
+
+			if($success){
+
+				return $this->json(array(
+
+					"success"=>true,
+					"message"=>"Role successfuly updated."
+				));
+			}
+			
+			return $this->json(array(
+
+				"success"=>false,
+				"message"=>"Failed to update role!"
+			));
+		}
+		
+		return $this->json(array(
+
+	        "success"=>false,
+	        "message"=>"Invalid input!",
+	        "validation"=>$messages
+	    ));
+	}
+
+	/**
+	* @Route(/role/add)
+	* @Method(POST)
+	*/
+	public function add(Request $request){
+
+		$name = $request->get("name");
+		$descr = $request->get("descr");
+
+		$roleFrm = $this->get("au.frm.Role", [$request]);
+
+		$messages = $roleFrm->validate();
+
+		if($messages["is_valid"]){
+
+			$role = $this->get("au.ctr.Role")->add(array(
+
+				"name"=>$name,
+				"descr"=>$descr
+			));
+
+			if(!is_null($role)){
+
+				return $this->json(array(
+
+					"success"=>true,
+					"message"=>"Role successfuly saved."
+				));
+			}
+			
+			return $this->json(array(
+
+				"success"=>false,
+				"message"=>"Failed to save role!"
+			));
+		}
+		
+		return $this->json(array(
+
+	        "success"=>false,
+	        "message"=>"Invalid input!",
+	        "validation"=>$messages
+	    ));
+	}
+
+	/**
+	* @Route(/role/{role_id:int}/add/permission/{perm_id:int})
+	* @Method(POST)
+	*/
+	public function addPermission($role_id, $perm_id, Request $request){
+
+		$rolePerm = self::get("core")->get("au.ctr.Role")->addPermission($role_id, $perm_id);
+
+		if(!is_null($rolePerm))
+			return self::json(array(
+
+				"success"=>true,
+				"message"=>"Role successfuly saved."
+			));
+		else
+			return self::json(array(
+
+				"success"=>false,
+				"message"=>"Failed to save role!"
+			));
+	}
+}

@@ -1,0 +1,149 @@
+<?php
+
+namespace __APP__\AuthModule\Controller;
+
+class Role extends \Strukt\Contract\Controller{
+
+	public function pager(Array $filter = [], $start_from, $page_size){
+
+		$qb = $this->da()->repo("Role")->createQueryBuilder("r");
+
+		$qb->addSelect("r.id, r.name");
+
+		if(array_key_exists("name", $filter)){
+
+			$qb->orWhere("r.name LIKE :name");
+
+			$qb->setParameter("name", $filter["name"]);
+		}
+
+		$qb->orderBy("r.id", "ASC");
+
+		$pager = $this->da()->paginate($qb, $start_from, $page_size);
+
+		return $pager;
+	}
+
+	public function findByName($name){
+
+		$role = $this->da()->repo("Role")->findOneBy(array(
+
+			"name"=>$name
+		));   	
+
+	   	return $role;
+	}
+
+	public function find($id){
+
+		$role = $this->da()->find("Role", $id);
+
+		return $role;
+	}
+
+	public function add(Array $role_data){
+
+		extract($role_data);
+
+		$role = $this->get("Role");
+
+		try{
+
+			$role->setName($name);
+			$role->setDescr($descr);
+			$role->save();
+
+			return $role;
+		}
+		catch(\Exception $e){
+
+			$this->core()->get("app.logger")->error($e->getMessage());
+
+			return null;
+		}
+	}
+
+	public function update($id, Array $role_data){
+
+		extract($role_data);
+
+		$role = $this->find($id);
+
+		try{
+
+			$role->setName($name);
+			$role->setDescr($descr);
+			$role->save();
+
+			return true;
+		}
+		catch(\Exception $e){
+
+			$this->core()->get("app.logger")->error($e->getMessage());
+
+			return false;
+		}
+	}
+
+	public function addPermission($role_id, $perm_id){
+
+		$role = $this->find($role_id);
+
+		$perm = $this->get("au.ctr.Permission")->find($perm_id);
+
+		$em = $this->em();
+
+		$em->getConnection()->beginTransaction();
+
+		try{
+
+			$rolePerm = $this->get("RolePermission");
+			$rolePerm->setPermission($perm);
+			$rolePerm->setRole($role);
+
+			$em->persist($perm);
+			$em->persist($role);
+			$em->persist($rolePerm);
+			$em->flush();
+
+			$em->getConnection()->commit();
+		}
+		catch(\Exception $e){
+
+			$em->getConnection()->rollBack();
+
+			$this->core()->get("app.logger")->error($e->getMessage());
+		}
+		finally{
+
+			$id = $rolePerm->getId();
+
+			if(!empty($id))
+				return $rolePerm;
+			
+			return null;
+		}
+	}
+
+	public function findPermissionsByRole($roleName){
+
+		$dql = "SELECT p.id, p.name
+					 FROM ~RolePermission rp
+						LEFT JOIN rp.permission p
+						LEFT JOIN rp.role r
+					WHERE r.name = :roleName";
+
+		$result = $this->da()
+			->query($dql)
+			->setParameters(array(
+
+				"roleName"=>$roleName
+			))
+			->getResult();
+
+		foreach($result as $row)
+			$rows[] = $row["name"];
+
+		return $rows;
+	}
+}

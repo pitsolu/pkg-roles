@@ -1,0 +1,120 @@
+<?php
+
+namespace __APP__\AuthModule\Controller;
+
+class User extends \Strukt\Contract\Controller{
+
+	public function findPermissionsByUsername($username){
+
+		$user = $this->findByUsername($username);
+
+		$permissions = $this->get("au.ctr.Role")->findPermissionsByRole($user->getRole()->getName());
+
+		return $permissions;
+	}
+
+	public function pager(Array $filter = [], $start_from, $page_size){
+
+		$qb = $this->da()->repo("User")->createQueryBuilder("u");
+
+		$qb->addSelect("u.id, u.username");
+
+		if(array_key_exists("username", $filter)){
+
+			$qb->orWhere("u.username LIKE :username");
+
+			$qb->setParameter("username", $filter["username"]);
+		}
+
+		$qb->orderBy("u.id", "ASC");
+
+		$pager = $this->da()->paginate($qb, $start_from, $page_size);
+
+		return $pager;
+	}
+
+	public function doAuth($username, $password){
+
+		$user = $this->findByUsername($username);
+
+		if(!is_null($user)){
+
+			if($user->getPassword() === sha1($password)){
+
+				return true;
+			}
+			
+			return false;
+		}
+
+		return false;
+	}
+
+	public function findByUsername($username){
+
+		$user = $this->da()->repo("User")->findOneBy(array(
+
+			"username"=>$username
+		));
+
+		return $user;
+	}
+
+	public function add(Array $user_data){
+
+		extract($user_data);
+
+		$em = $this->em();
+
+		$em->getConnection()->beginTransaction();
+
+		$user = $this->get("User");
+
+		$role = $this->get("au.ctr.Role")->find($role_id);
+
+		try{
+
+			$user->setUsername($username);
+			$user->setPassword(sha1($password));
+			$user->setRole($role);
+
+			$em->persist($role);
+			$em->persist($user);
+			$em->flush();
+
+			$em->getConnection()->commit();
+
+			return $user;
+		}
+		catch(\Exception $e){
+
+			$em->getConnection()->rollBack();
+
+			$this->core()->get("app.logger")->error($e->getMessage());
+
+			return null;
+		}
+	}
+
+	public function changePassword($username, $password){
+
+		try{
+
+			$user = $this->findByUsername($username);
+
+			if(is_null($user))
+				throw new \Exception("AuthModule\Controller\User::changePassword | username does not exist!");
+
+			$user->setPassword(sha1($password));
+			$user->save();
+
+			return true;
+		}
+		catch(\Exception $e){
+
+			$this->core()->get("app.logger")->error($e->getMessage());
+
+			return false;
+		}
+	}
+}
