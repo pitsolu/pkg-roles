@@ -6,6 +6,9 @@ $pkg_dir = realpath(__DIR__."/../");
 
 $cfg = parse_ini_file(sprintf("%s/cfg/app.ini", $app_root));
 
+if(trim($cfg["app-name"]) == "__APP__")
+	throw new \Exception("Create an cfg[app-name] in your cfg/app.ini file via generate:app cli cmd!");
+
 require(sprintf("%s/vendor/autoload.php", $app_root));
 
 $app_dir = sprintf("%s/app/src/%s", $app_root, $cfg["app-name"]);
