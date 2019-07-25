@@ -2,6 +2,8 @@
 
 namespace __APP__\AuthModule\Router;
 
+use Strukt\Http\Request;
+
 class User extends \Strukt\Contract\Router{
 
 	/**
