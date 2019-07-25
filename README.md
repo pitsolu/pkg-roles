@@ -5,37 +5,18 @@ Strukt Roles
 
 Project `strukt/roles` is a `strukt` module.
 
-### Prerequisite
-
-You will require to install `strukt/strukt` via [strukt-strukt](https://github.com/pitsolu/strukt-strukt). Then install module `strukt/do` via [strukt-do](https://github.com/pitsolu/strukt-do)
-
 ### Installation
 
 Install and publish `strukt/roles`:
 
 ```sh
 composer require strukt/roles
-```
-
-### Create your app
-
-First you'll need to create your app
-
-```sh
-./console generate:app payroll
-```
-
-Which will create your app folder with your `app/src/Payroll/AuthModule` and load your `app-name` into the `cfg/app.ini` file.
-
-### Publish your package
-
-```sh
+composer exec publish-strukt-do
+composer exec config-do
+chmod +x console
+./console generate:app nameofyourapp
 composer exec publish-strukt-roles
-```
-
-The command above will replace your earlier generated `app/src/Payroll/AuthModule` and store the backup will be at `app/src/Payroll/AuthModule~` folder. You'll now need to load your modules, run command:
-
-```sh
+chmod +x console #the above command will replace current ./console	
 ./console generate:loader
 ```
 
