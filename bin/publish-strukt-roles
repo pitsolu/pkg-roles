@@ -4,50 +4,50 @@
 $app_root = realpath(__DIR__."/../../../../");
 $pkg_dir = realpath(__DIR__."/../");
 
+// $app_root = realpath(__DIR__."/../../");
+// $pkg_dir = realpath(__DIR__."/../");
+
 $cfg = parse_ini_file(sprintf("%s/cfg/app.ini", $app_root));
 
 if(trim($cfg["app-name"]) == "__APP__")
-	throw new \Exception("Create an cfg[app-name] in your cfg/app.ini file via generate:app cli cmd!");
+	throw new \Exception(
+		"Create an cfg[app-name] in your [cfg/app.ini] file via [generate:app cli] cmd!");
 
 require(sprintf("%s/vendor/autoload.php", $app_root));
 
-$app_dir = sprintf("%s/app/src/%s", $app_root, $cfg["app-name"]);
-Strukt\Fs::rename(sprintf("%s/AuthModule", $app_dir), sprintf("%s/AuthModule~", $app_dir));
-Strukt\Fs::mkdir(sprintf("%s/AuthModule", $app_dir));
+use Strukt\Fs;
 
-foreach(array(
+$manifest_files = explode("\n", Fs::cat(sprintf("%s/manifest", $pkg_dir)));
 
-			"Controller",
-			"Tests",
-			"Form",
-			"Router",
-			"Command"
+foreach($manifest_files as $file){
 
-		) as $folder)
-			Strukt\Fs::mkdir(sprintf("%s/AuthModule/%s", $app_dir, $folder));
+	$info = pathinfo($file);
 
-$auth_mod_file = sprintf("%s/AuthModule/%sAuthModule.php", $app_dir, $cfg["app-name"]);
-copy(sprintf("%s/app/src/App/AuthModule/AuthModule.php", $pkg_dir), $auth_mod_file);
-$contents = str_replace("__APP__", $cfg["app-name"], Strukt\Fs::cat($auth_mod_file));
-Strukt\Fs::overwrite($auth_mod_file, $contents);
+	if(array_key_exists("dirname", $info)){
 
-Strukt\Fs::cpr(sprintf("%s/database", $pkg_dir), sprintf("%s/database", $app_root));
+		$dir = str_replace("app/src/App", sprintf("app/src/%s", $cfg["app-name"]), $info["dirname"]);
 
-Strukt\Fs::rename(sprintf("%s/console", $app_root), sprintf("%s/console~", $app_root));
-copy(sprintf("%s/console", $pkg_dir), sprintf("%s/console", $app_root));
+		$dir = sprintf("%s/%s", $app_root, $dir);
 
-$index_file = sprintf("%s/index.php", $app_root);
-Strukt\Fs::rename(sprintf("%s/index.php", $app_root), sprintf("%s/index.php~", $app_root));
-copy(sprintf("%s/index.php", $pkg_dir), $index_file);
-$contents = str_replace("__APP__", $cfg["app-name"], Strukt\Fs::cat($index_file));
-Strukt\Fs::overwrite($index_file, $contents);
+		if(!Fs::isDir($dir)){
 
-foreach(glob(sprintf("%s/app/**/**/**/**/**", $pkg_dir)) as $file){
+			Fs::mkdir($dir);
+		}
 
-	$path = str_replace(array($pkg_dir, "/App/"), array("", sprintf("/%s/", $cfg["app-name"])), $file);
+		$o_file = sprintf("%s/%s", $dir, $info["basename"]);
+		$p_file = sprintf("%s/%s/%s", $pkg_dir, $info["dirname"], $info["basename"]);
 
-	$content = str_replace("__APP__", $cfg["app-name"], file_get_contents($file));
+		if(Fs::isFile($o_file)){
 
-	$file = new SplFileObject($app_root.$path, "w+"); 
-	$file->fwrite($content);
-} 
+			rename($o_file, sprintf("%s~", $o_file));
+		}
+
+		$content = str_replace("__APP__", $cfg["app-name"], Fs::cat($p_file));
+		$file = new SplFileObject($o_file, "w+"); 
+		$file->fwrite($content);
+	}
+}
+
+$o_path = sprintf("%s/app/src/%s/AuthModule", $app_root, $cfg["app-name"]);
+rename(sprintf("%s/AuthModule.php", $o_path), 
+		sprintf("%s/%sAuthModule.php", $o_path, $cfg["app-name"]));
