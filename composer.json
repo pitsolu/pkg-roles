@@ -12,6 +12,5 @@
             "email": "pitsolu@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
-    "bin":["bin/publish-strukt-roles"]
+    "minimum-stability": "dev"
 }

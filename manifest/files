@@ -20,4 +20,3 @@ app/src/App/AuthModule/Command/UserDumpCredentials.php
 app/src/App/AuthModule/Command/UserResetPassword.php
 app/src/App/AuthModule/Command/UserAdd.php
 app/src/App/AuthModule/Tests/UserTest.php
-README.md
