@@ -1,6 +1,4 @@
 database/schema/Schema/Migration/VersionAuth.php
-index.php
-console
 app/src/App/AuthModule/Router/Index.php
 app/src/App/AuthModule/Router/User.php
 app/src/App/AuthModule/Router/Auth.php
