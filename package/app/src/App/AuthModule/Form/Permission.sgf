@@ -1,8 +1,8 @@
 <?php
 
-namespace __APP__\AuthModule\Form;
+namespace {{app}}\AuthModule\Form;
 
-class Role extends \Strukt\Contract\Form{
+class Permission extends \Strukt\Contract\Form{
 	
 	protected function validation(){
 

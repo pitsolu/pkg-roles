@@ -1,0 +1,9 @@
+<?php
+
+namespace {{app}}\AuthModule;
+
+class {{app}}AuthModule extends \Strukt\Contract\Module{
+
+	protected  $alias = "Au";
+
+}

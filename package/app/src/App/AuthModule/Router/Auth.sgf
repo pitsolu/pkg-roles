@@ -1,6 +1,6 @@
 <?php
 
-namespace __APP__\AuthModule\Router;
+namespace {{app}}\AuthModule\Router;
 
 use Strukt\Http\Request;
 use Strukt\Http\RedirectResponse;

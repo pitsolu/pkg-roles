@@ -1,6 +1,6 @@
 <?php
 
-namespace __APP__\AuthModule\Tests;
+namespace {{app}}\AuthModule\Tests;
 
 use Strukt\Core\Registry;
 use PHPUnit\Framework\TestCase;

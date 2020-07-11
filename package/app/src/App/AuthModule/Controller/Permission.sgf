@@ -1,6 +1,6 @@
 <?php
 
-namespace __APP__\AuthModule\Controller;
+namespace {{app}}\AuthModule\Controller;
 
 class Permission extends \Strukt\Contract\Controller{
 

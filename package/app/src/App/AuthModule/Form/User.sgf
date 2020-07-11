@@ -1,6 +1,6 @@
 <?php
 
-namespace __APP__\AuthModule\Form;
+namespace {{app}}\AuthModule\Form;
 
 class User extends \Strukt\Contract\Form{
 	
