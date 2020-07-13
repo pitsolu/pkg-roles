@@ -1,5 +1,5 @@
 {
-    "name": "strukt/roles",
+    "name": "strukt/pkg-roles",
     "description": "RBAC",
     "type": "strukt-module",
     "require": {
