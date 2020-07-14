@@ -3,7 +3,7 @@
     "description": "RBAC",
     "type": "strukt-module",
     "require": {
-        "strukt/do": "dev-master"
+        "strukt/pkg-do": "dev-master"
     },
     "license": "MIT",
     "authors": [
