@@ -3,21 +3,18 @@ Strukt Roles
 
 ## Getting Started
 
-Project `strukt/roles` is a `strukt` module.
+Project `strukt/pkg-roles` is a `strukt` module.
 
 ### Installation
 
-Install and publish `strukt/roles`:
+Install and publish `strukt/pkg-roles`:
 
 ```sh
-composer require strukt/roles
-composer exec publish-strukt-do
-composer exec config-do
-chmod +x console
-./console generate:app nameofyourapp
-composer exec publish-strukt-roles
-chmod +x console #the above command will replace current ./console	
-./console generate:loader
+composer require strukt/pkg-roles
+console generate:app nameofyourapp
+console publish:package strukt/pkg-do
+console publish:package strukt/pkg-roles
+console generate:loader	
 ```
 
 ### Models

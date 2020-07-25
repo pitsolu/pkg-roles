@@ -1,1 +1,3 @@
 php_errors.log
+composer.lock
+vendor/
