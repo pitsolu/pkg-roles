@@ -2,7 +2,7 @@
 	"package":"pkg-roles",
 	"files":[
 
-		"database/schema/Schema/Migration/VersionAuth.php",
+		"database/schema/Schema/Migration/VersionRoles.php",
 		"app/src/App/AuthModule/Router/Index.sgf",
 		"app/src/App/AuthModule/Router/User.sgf",
 		"app/src/App/AuthModule/Router/Auth.sgf",
