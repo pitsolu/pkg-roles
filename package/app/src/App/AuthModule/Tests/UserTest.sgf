@@ -2,15 +2,12 @@
 
 namespace {{app}}\AuthModule\Tests;
 
-use Strukt\Core\Registry;
-use PHPUnit\Framework\TestCase;
-
-class UserTest extends TestCase{
+class UserTest extends \App\Contract\AbstractTestCase{
 
 	
 	public function setUp(){
 
-		$this->core = Registry::getInstance()->get("core");
+		//
 	}
 
 	
