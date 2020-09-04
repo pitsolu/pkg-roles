@@ -16,7 +16,7 @@ class UserTest extends \App\Contract\AbstractTestCase{
 		$username = "admin";
 		$password = "p@55w0rd";
 
-		$isSuccess = $this->core->get("au.ctr.User")->doAuth($username, $password);
+		$isSuccess = $this->get("au.ctr.User")->doAuth($username, $password);
 
 		$this->assertTrue($isSuccess);
 	}
