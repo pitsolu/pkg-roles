@@ -5,7 +5,7 @@ namespace {{app}}\AuthModule\Tests;
 class UserTest extends \App\Contract\AbstractTestCase{
 
 	
-	public function setUp(){
+	public function setUp():void{
 
 		//
 	}
