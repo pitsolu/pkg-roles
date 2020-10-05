@@ -21,7 +21,8 @@
 		"app/src/App/AuthModule/Command/UserDumpCredentials.sgf",
 		"app/src/App/AuthModule/Command/UserResetPassword.sgf",
 		"app/src/App/AuthModule/Command/UserAdd.sgf",
-		"app/src/App/AuthModule/Tests/UserTest.sgf"
+		"app/src/App/AuthModule/Tests/UserTest.sgf",
+		"lib/App/Package/PkgRoles.php"
 	],
 	"modules":[
 
