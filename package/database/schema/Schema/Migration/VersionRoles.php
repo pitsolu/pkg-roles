@@ -2,7 +2,7 @@
 
 namespace Schema\Migration;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
@@ -13,8 +13,7 @@ class VersionRoles extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function up(Schema $schema)
-    {
+    public function up(Schema $schema):void{
 
         if($schema->hasTable("permission"))
             $schema->dropTable("permission");
@@ -75,8 +74,8 @@ class VersionRoles extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function down(Schema $schema)
-    {
+    public function down(Schema $schema):void{
+        
         $schema->dropTable("permission");
         $schema->dropTable("role");
         $schema->dropTable("role_permission");
