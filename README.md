@@ -10,10 +10,10 @@ Project `strukt/pkg-roles` is a `strukt` module.
 Install and publish `strukt/pkg-roles`:
 
 ```sh
-composer require strukt/pkg-roles
 console generate:app nameofyourapp
-console publish:package strukt/pkg-do
-console publish:package strukt/pkg-roles
+composer require strukt/pkg-roles
+console publish:package pkg-do
+console publish:package pkg-roles
 console generate:loader	
 ```
 
@@ -63,8 +63,6 @@ class Permission extends \Strukt\Contract\Router{
 ```
 
 ### Finally
-
-Your generated `Payroll\User` model must `implement Strukt\Contract\UserInterface`.
 
 You are now good and ready to go!
 
