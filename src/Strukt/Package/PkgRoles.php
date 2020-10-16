@@ -58,7 +58,7 @@ class PkgRoles implements Pkg{
 		return $this->manifest["modules"];
 	}
 
-	public function isInstalled(){
+	public function isPublished(){
 
 		return class_exists(\Schema\Migration\VersionRoles::class);
 	}
